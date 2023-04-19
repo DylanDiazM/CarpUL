@@ -1,0 +1,74 @@
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  Login _login = Login();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Inicio de sesión'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  _login.username = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Nombre de usuario',
+              ),
+            ),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  _login.password = value;
+                });
+              },
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Contraseña',
+              ),
+            ),
+            RaisedButton(
+              child: Text('Iniciar sesión'),
+              onPressed: () {
+                bool success = _login.signIn();
+
+                if (success) {
+                  Navigator.pushReplacementNamed(context, '/home');
+                } else {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('Nombre de usuario o contraseña incorrectos'),
+                  ));
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Login {
+  String username = '';
+  String password = '';
+
+  bool signIn() {
+    // Aquí se realizaría la lógica de autenticación.
+
+    if (username == 'usuario' && password == 'contraseña') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
