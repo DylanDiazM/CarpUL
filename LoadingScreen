@@ -57,4 +57,17 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     ),
   );
+  class Login {
+    String username = '';
+    String password = '';
   
+    bool signIn() {
+      // Aquí se realizaría la lógica de autenticación.
+      // Por simplicidad, simplemente se compara el nombre de usuario y la contraseña con valores fijos.
+      if (username == 'usuario' && password == 'contraseña') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
