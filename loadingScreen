@@ -8,6 +8,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Aquí va el código que construye el widget
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio de sesión'),
