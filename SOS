@@ -1,0 +1,58 @@
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  Location _location;
+  
+  void callEmergency() {
+    // Aquí se implementaría la lógica para llamar a las autoridades y enviar la ubicación del usuario
+    print('Se ha llamado a las autoridades con la ubicación $_location');
+  }
+
+  void getLocation() async {
+    // Aquí se implementaría la lógica para obtener la ubicación del usuario
+    var rng = new Random();
+    double latitude = rng.nextDouble() * 200 - 100;
+    double longitude = rng.nextDouble() * 400 - 200;
+    _location = Location(latitude, longitude);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pantalla principal'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Botón para llamar a las autoridades
+            RaisedButton(
+              child: Text('SOS'),
+              onPressed: () {
+                // Obtener la ubicación del usuario y llamar a las autoridades
+                getLocation();
+                callEmergency();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Location {
+  double latitude;
+  double longitude;
+
+  Location(this.latitude, this.longitude);
+
+  @override
+  String toString() {
+    return '($latitude, $longitude)';
+  }
+}
