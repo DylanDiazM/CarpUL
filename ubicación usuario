@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class UserLocationScreen extends StatefulWidget {
+  @override
+  _UserLocationScreenState createState() => _UserLocationScreenState();
+}
+
+class _UserLocationScreenState extends State<UserLocationScreen> {
+  final Set<Marker> _markers = {};
+  late GoogleMapController _mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+  }
+
+  void _updateMarkers() {
+    // Aquí se obtendrían las ubicaciones de los usuarios y se actualizarían los marcadores en consecuencia
+    setState(() {
+      _markers.clear();
+      _markers.add(Marker(
+        markerId: MarkerId('user1'),
+        position: LatLng(37.7749, -122.4194),
+        infoWindow: InfoWindow(title: 'Usuario 1'),
+      ));
+      _markers.add(Marker(
+        markerId: MarkerId('user2'),
+        position: LatLng(37.7749, -122.4094),
+        infoWindow: InfoWindow(title: 'Usuario 2'),
+      ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Ubicación de usuarios'),
+      ),
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(37.7749, -122.4194),
+          zoom: 12,
+        ),
+        markers: _markers,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _updateMarkers,
+        child: Icon(Icons.refresh),
+      ),
+    );
+  }
+}

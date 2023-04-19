@@ -1,0 +1,75 @@
+class UserVerificationStatus {
+  bool isIdentityVerified;
+  bool isDriverLicenseVerified;
+  bool isVehicleRegistered;
+  bool isVehicleInspected;
+  bool isInsuranceValid;
+
+  UserVerificationStatus({
+    required this.isIdentityVerified,
+    required this.isDriverLicenseVerified,
+    required this.isVehicleRegistered,
+    required this.isVehicleInspected,
+    required this.isInsuranceValid,
+  });
+}
+
+class UserVerificationScreen extends StatefulWidget {
+  @override
+  _UserVerificationScreenState createState() => _UserVerificationScreenState();
+}
+
+class _UserVerificationScreenState extends State<UserVerificationScreen> {
+  late UserVerificationStatus _userVerificationStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    // aquí es donde puedes llamar a una API o una base de datos para obtener el estado de verificación del usuario
+    _userVerificationStatus = UserVerificationStatus(
+      isIdentityVerified: true,
+      isDriverLicenseVerified: true,
+      isVehicleRegistered: false,
+      isVehicleInspected: false,
+      isInsuranceValid: false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Verificación del usuario'),
+      ),
+      body: Column(
+        children: [
+          ListTile(
+            leading: Icon(_userVerificationStatus.isIdentityVerified ? Icons.check_circle_outline : Icons.radio_button_unchecked),
+            title: Text('Identidad'),
+            subtitle: Text(_userVerificationStatus.isIdentityVerified ? 'Verificada' : 'No verificada'),
+          ),
+          ListTile(
+            leading: Icon(_userVerificationStatus.isDriverLicenseVerified ? Icons.check_circle_outline : Icons.radio_button_unchecked),
+            title: Text('Licencia de conducir'),
+            subtitle: Text(_userVerificationStatus.isDriverLicenseVerified ? 'Verificada' : 'No verificada'),
+          ),
+          ListTile(
+            leading: Icon(_userVerificationStatus.isVehicleRegistered ? Icons.check_circle_outline : Icons.radio_button_unchecked),
+            title: Text('Vehículo registrado'),
+            subtitle: Text(_userVerificationStatus.isVehicleRegistered ? 'Registrado' : 'No registrado'),
+          ),
+          ListTile(
+            leading: Icon(_userVerificationStatus.isVehicleInspected ? Icons.check_circle_outline : Icons.radio_button_unchecked),
+            title: Text('Vehículo inspeccionado'),
+            subtitle: Text(_userVerificationStatus.isVehicleInspected ? 'Inspeccionado' : 'No inspeccionado'),
+          ),
+          ListTile(
+            leading: Icon(_userVerificationStatus.isInsuranceValid ? Icons.check_circle_outline : Icons.radio_button_unchecked),
+            title: Text('Seguro válido'),
+            subtitle: Text(_userVerificationStatus.isInsuranceValid ? 'Válido' : 'No válido'),
+          ),
+        ],
+      ),
+    );
+  }
+}
