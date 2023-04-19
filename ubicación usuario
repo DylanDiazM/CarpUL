@@ -15,7 +15,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
   }
 
   void _updateMarkers() {
-    // Aquí se obtendrían las ubicaciones de los usuarios y se actualizarían los marcadores en consecuencia
+    
     setState(() {
       _markers.clear();
       _markers.add(Marker(

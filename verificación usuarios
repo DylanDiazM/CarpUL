@@ -25,7 +25,7 @@ class _UserVerificationScreenState extends State<UserVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    // aquí es donde puedes llamar a una API o una base de datos para obtener el estado de verificación del usuario
+    
     _userVerificationStatus = UserVerificationStatus(
       isIdentityVerified: true,
       isDriverLicenseVerified: true,
