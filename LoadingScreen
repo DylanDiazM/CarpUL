@@ -57,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     ),
   );
-  class Login {
+  
+class Login {
     String username = '';
     String password = '';
   
