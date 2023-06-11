@@ -1,0 +1,259 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mi aplicación',
+      home: ProfileSelectionScreen(),
+    );
+  }
+}
+
+class ProfileSelectionScreen extends StatefulWidget {
+  @override
+  _ProfileSelectionScreenState createState() => _ProfileSelectionScreenState();
+}
+
+class _ProfileSelectionScreenState extends State<ProfileSelectionScreen> {
+  String selectedProfile = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Selecciona tu perfil'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  selectedProfile = 'Conductor';
+                });
+              },
+              child: Text('Conductor'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  selectedProfile = 'Pasajero';
+                });
+                if (selectedProfile == 'Pasajero') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RouteSelectionScreen()),
+                  );
+                }
+              },
+              child: Text('Pasajero'),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Perfil seleccionado: $selectedProfile',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RouteSelectionScreen extends StatefulWidget {
+  @override
+  _RouteSelectionScreenState createState() => _RouteSelectionScreenState();
+}
+
+class _RouteSelectionScreenState extends State<RouteSelectionScreen> {
+  List<String> routes = [
+    'Ruta 1',
+    'Ruta 2',
+    'Ruta 3',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Selección de Ruta'),
+      ),
+      body: ListView.builder(
+        itemCount: routes.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(routes[index]),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DriverSelectionScreen()),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class DriverSelectionScreen extends StatefulWidget {
+  @override
+  _DriverSelectionScreenState createState() => _DriverSelectionScreenState();
+}
+
+class _DriverSelectionScreenState extends State<DriverSelectionScreen> {
+  List<String> drivers = [
+    'Conductor 1',
+    'Conductor 2',
+    'Conductor 3',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Selección de Conductor'),
+      ),
+      body: ListView.builder(
+        itemCount: drivers.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(drivers[index]),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RequestPickupScreen(driver: drivers[index])),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class RequestPickupScreen extends StatefulWidget {
+  final String driver;
+
+  RequestPickupScreen({required this.driver});
+
+  @override
+  _RequestPickupScreenState createState() => _RequestPickupScreenState();
+}
+
+class _RequestPickupScreenState extends State<RequestPickupScreen> {
+  String pickupAddress = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Solicitud de Recojo'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Conductor: ${widget.driver}',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  pickupAddress = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Dirección de Punto de Recojo',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatScreen(driver: widget.driver, pickupAddress: pickupAddress)),
+                );
+              },
+              child: Text('Enviar Solicitud'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChatScreen extends StatefulWidget {
+  final String driver;
+  final String pickupAddress;
+
+  ChatScreen({required this.driver, required this.pickupAddress});
+
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  List<String> messages = [];
+
+  TextEditingController _messageController = TextEditingController();
+
+  void _sendMessage() {
+    setState(() {
+      messages.add(_messageController.text);
+      _messageController.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chat'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(messages[index]),
+                );
+              },
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      labelText: 'Escribe un mensaje',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: _sendMessage,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
