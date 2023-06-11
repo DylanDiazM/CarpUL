@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Carpool App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Carpool App'),
+      ),
+      body: Center(
+        child: Text('Bienvenido al menú principal'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmergencyMenuPage()),
+          );
+        },
+        child: Icon(Icons.warning),
+        backgroundColor: Colors.red,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+    );
+  }
+}
+
+class EmergencyMenuPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Menú de emergencia'),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            leading: Icon(Icons.call),
+            title: Text('Llamar a la policía'),
+            onTap: () {
+              // Lógica para llamar a la policía
+              // Puedes utilizar plugins de Flutter como url_launcher para realizar la llamada
+              print('Llamando a la policía');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.call),
+            title: Text('Llamar a los bomberos'),
+            onTap: () {
+              // Lógica para llamar a los bomberos
+              print('Llamando a los bomberos');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.location_on),
+            title: Text('Enviar ubicación'),
+            onTap: () {
+              // Lógica para enviar la ubicación
+              // Puedes utilizar plugins de Flutter como geolocator para obtener la ubicación actual
+              print('Enviando ubicación');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
