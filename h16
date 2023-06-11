@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+
+class Trip {
+  final String id;
+  final String destination;
+  final DateTime date;
+  final double distance;
+
+  Trip({required this.id, required this.destination, required this.date, required this.distance});
+}
+
+class ProfileScreen extends StatelessWidget {
+  final List<Trip> trips = [
+    Trip(id: '1', destination: 'Destino 1', date: DateTime.now(), distance: 10.0),
+    Trip(id: '2', destination: 'Destino 2', date: DateTime.now(), distance: 15.0),
+    Trip(id: '3', destination: 'Destino 3', date: DateTime.now(), distance: 20.0),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Historial de Viajes'),
+      ),
+      body: ListView.builder(
+        itemCount: trips.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TripDetailsScreen(trip: trips[index]),
+                ),
+              );
+            },
+            child: Card(
+              child: ListTile(
+                title: Text(trips[index].destination),
+                subtitle: Text('Fecha: ${trips[index].date.toString()}'),
+                trailing: Text('Distancia: ${trips[index].distance.toString()} km'),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class TripDetailsScreen extends StatelessWidget {
+  final Trip trip;
+
+  TripDetailsScreen({required this.trip});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalles del Viaje'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Destino: ${trip.destination}'),
+            SizedBox(height: 16.0),
+            Text('Fecha: ${trip.date.toString()}'),
+            SizedBox(height: 16.0),
+            Text('Distancia: ${trip.distance.toString()} km'),
+            // Agrega más información del viaje si es necesario
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: ProfileScreen(),
+  ));
+}
