@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+
+class Viaje {
+  final String origen;
+  final String destino;
+  int capacidad;
+  bool aceptado;
+
+  Viaje(this.origen, this.destino, this.capacidad, this.aceptado);
+}
+
+class ConductorApp extends StatefulWidget {
+  @override
+  _ConductorAppState createState() => _ConductorAppState();
+}
+
+class _ConductorAppState extends State<ConductorApp> {
+  List<Viaje> solicitudes = [
+    Viaje('Origen 1', 'Destino 1', 3, false),
+    Viaje('Origen 2', 'Destino 2', 2, false),
+    Viaje('Origen 3', 'Destino 3', 4, false),
+  ];
+
+  List<Viaje> aceptados = [];
+
+  void aceptarSolicitud(int index) {
+    setState(() {
+      solicitudes[index].aceptado = true;
+      solicitudes[index].capacidad--;
+      aceptados.add(solicitudes[index]);
+      solicitudes.removeAt(index);
+    });
+  }
+
+  void rechazarSolicitud(int index) {
+    setState(() {
+      solicitudes.removeAt(index);
+    });
+  }
+
+  Widget buildSolicitud(BuildContext context, int index) {
+    final viaje = solicitudes[index];
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Icon(Icons.close, color: Colors.white),
+      ),
+      onDismissed: (direction) {
+        rechazarSolicitud(index);
+      },
+      child: ListTile(
+        title: Text('Origen: ${viaje.origen} - Destino: ${viaje.destino}'),
+        subtitle: Text('Capacidad: ${viaje.capacidad}'),
+        trailing: IconButton(
+          icon: Icon(Icons.check),
+          color: Colors.green,
+          onPressed: () {
+            if (viaje.capacidad > 0) {
+              aceptarSolicitud(index);
+            } else {
+              // Aquí puedes mostrar una alerta o un mensaje indicando que no hay capacidad disponible.
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildAceptado(BuildContext context, int index) {
+    final viaje = aceptados[index];
+    return ListTile(
+      title: Text('Aceptado: ${viaje.origen} - ${viaje.destino}'),
+      subtitle: Text('Capacidad: ${viaje.capacidad}'),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Solicitudes de Viaje'),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: solicitudes.length,
+                itemBuilder: buildSolicitud,
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Text('Solicitudes Aceptadas', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+            Expanded(
+              child: ListView.builder(
+                itemCount: aceptados.length,
+                itemBuilder: buildAceptado,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(ConductorApp());
+}
