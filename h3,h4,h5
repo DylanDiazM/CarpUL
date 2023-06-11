@@ -1,0 +1,284 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mi aplicación',
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
+    );
+  }
+}
+
+class RouteGenerator {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (_) => ProfileSelectionScreen());
+      case '/driverForm':
+        return MaterialPageRoute(builder: (_) => DriverFormScreen());
+      case '/routePublish':
+        return MaterialPageRoute(builder: (_) => RoutePublishScreen());
+      default:
+        return MaterialPageRoute(builder: (_) => UnknownScreen());
+    }
+  }
+}
+
+class ProfileSelectionScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Selecciona tu perfil'),
+      ),
+      body: ProfileSelectionBody(),
+    );
+  }
+}
+
+class ProfileSelectionBody extends StatefulWidget {
+  @override
+  _ProfileSelectionBodyState createState() => _ProfileSelectionBodyState();
+}
+
+class _ProfileSelectionBodyState extends State<ProfileSelectionBody> {
+  String selectedProfile = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selectedProfile = 'Conductor';
+              });
+              Navigator.pushNamed(context, '/driverForm');
+            },
+            child: Text('Conductor'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selectedProfile = 'Pasajero';
+              });
+            },
+            child: Text('Pasajero'),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Perfil seleccionado: $selectedProfile',
+            style: TextStyle(fontSize: 18),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DriverFormScreen extends StatelessWidget {
+  final DriverFormViewModel viewModel = DriverFormViewModel();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Registro de Conductor'),
+      ),
+      body: DriverFormBody(viewModel: viewModel),
+    );
+  }
+}
+
+class DriverFormBody extends StatefulWidget {
+  final DriverFormViewModel viewModel;
+
+  const DriverFormBody({Key? key, required this.viewModel}) : super(key: key);
+
+  @override
+  _DriverFormBodyState createState() => _DriverFormBodyState();
+}
+
+class _DriverFormBodyState extends State<DriverFormBody> {
+  TextEditingController licensePlateController = TextEditingController();
+  TextEditingController driverLicenseController = TextEditingController();
+  TextEditingController vehicleModelController = TextEditingController();
+  TextEditingController passengerCountController = TextEditingController();
+
+  @override
+  void dispose() {
+    licensePlateController.dispose();
+    driverLicenseController.dispose();
+    vehicleModelController.dispose();
+    passengerCountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: licensePlateController,
+            onChanged: (value) {
+              widget.viewModel.updateLicensePlate(value);
+            },
+            decoration: InputDecoration(
+              labelText: 'Matrícula del vehículo',
+            ),
+          ),
+          TextField(
+            controller: driverLicenseController,
+            onChanged: (value) {
+              widget.viewModel.updateDriverLicense(value);
+            },
+            decoration: InputDecoration(
+              labelText: 'Licencia de conducir',
+            ),
+          ),
+          TextField(
+            controller: vehicleModelController,
+            onChanged: (value) {
+              widget.viewModel.updateVehicleModel(value);
+            },
+            decoration: InputDecoration(
+              labelText: 'Modelo del vehículo',
+            ),
+          ),
+          TextField(
+            controller: passengerCountController,
+            onChanged: (value) {
+              widget.viewModel.updatePassengerCount(value);
+            },
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Cantidad de pasajeros',
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              widget.viewModel.register(context);
+            },
+            child: Text('Registrar'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DriverFormViewModel {
+  late String licensePlate;
+  late String driverLicense;
+  late String vehicleModel;
+  late int passengerCount;
+
+  void updateLicensePlate(String value) {
+    licensePlate = value;
+  }
+
+  void updateDriverLicense(String value) {
+    driverLicense = value;
+  }
+
+  void updateVehicleModel(String value) {
+    vehicleModel = value;
+  }
+
+  void updatePassengerCount(String value) {
+    passengerCount = int.tryParse(value) ?? 0;
+  }
+
+  void register(BuildContext context) {
+    print('Matrícula: $licensePlate');
+    print('Licencia de conducir: $driverLicense');
+    print('Modelo del vehículo: $vehicleModel');
+    print('Cantidad de pasajeros: $passengerCount');
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Registro Correcto'),
+          content: Text('¡Has sido registrado como conductor!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/routePublish');
+              },
+              child: Text('Continuar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class RoutePublishScreen extends StatelessWidget {
+  final TextEditingController routeController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Publicar Ruta de Viaje'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: routeController,
+              onChanged: (value) {
+                // Realizar alguna acción con la ruta cargada
+                // Por ejemplo, puedes guardar la ruta en una base de datos o enviarla a un servidor
+                // Aquí solo mostraremos la ruta en la consola
+                print('Ruta de Google Maps: $value');
+              },
+              decoration: InputDecoration(
+                labelText: 'Ruta de Google Maps',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Realizar alguna acción con la ruta cargada
+                // Por ejemplo, puedes guardar la ruta en una base de datos o enviarla a un servidor
+                // Aquí solo mostraremos la ruta en la consola
+                print('Ruta de Google Maps: ${routeController.text}');
+              },
+              child: Text('Cargar Ruta'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UnknownScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Página desconocida'),
+      ),
+      body: Center(
+        child: Text('La página solicitada no existe.'),
+      ),
+    );
+  }
+}
