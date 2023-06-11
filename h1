@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+
+class Viaje {
+  final String id;
+  final String origen;
+  final String destino;
+
+  Viaje({required this.id, required this.origen, required this.destino});
+}
+
+class CancelarViajeScreen extends StatefulWidget {
+  @override
+  _CancelarViajeScreenState createState() => _CancelarViajeScreenState();
+}
+
+class _CancelarViajeScreenState extends State<CancelarViajeScreen> {
+  Viaje? _viajeSeleccionado;
+
+  List<Viaje> _viajes = [
+    Viaje(id: '1', origen: 'A', destino: 'B'),
+   
+  ];
+
+  bool _viajeCancelado = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalles del viaje'),
+      ),
+      body: Column(
+        children: [
+          Text('Selecciona un viaje:'),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _viajes.length,
+            itemBuilder: (BuildContext context, int index) {
+              Viaje viaje = _viajes[index];
+              return ListTile(
+                title: Text('Viaje ${viaje.id}'),
+                subtitle: Text('${viaje.origen} - ${viaje.destino}'),
+                onTap: () {
+                  setState(() {
+                    _viajeSeleccionado = viaje;
+                  });
+                },
+                selected: _viajeSeleccionado == viaje,
+              );
+            },
+          ),
+          ElevatedButton(
+            onPressed: _viajeSeleccionado != null && !_viajeCancelado
+                ? () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Confirmar cancelación'),
+                          content: Text(
+                              '¿Estás seguro de que quieres cancelar el viaje seleccionado?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Cerrar el diálogo
+                              },
+                              child: Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Lógica para cancelar el viaje seleccionado
+                                setState(() {
+                                  _viajes.remove(_viajeSeleccionado);
+                                  _viajeCancelado = true;
+                                });
+                                Navigator.of(context).pop(); // Cerrar el diálogo
+                              },
+                              child: Text('Confirmar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                : null,
+            child: Text('Cancelar viaje'),
+          ),
+          if (_viajeCancelado)
+            Text(
+              'Viaje "${_viajeSeleccionado!.id}" cancelado correctamente.',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: CancelarViajeScreen(),
+  ));
+}
