@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class Trip {
+  final String destination;
+  final DateTime time;
+
+  Trip(this.destination, this.time);
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Cancelación de Viaje',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: CancelTripScreen(),
+    );
+  }
+}
+
+class CancelTripScreen extends StatefulWidget {
+  @override
+  _CancelTripScreenState createState() => _CancelTripScreenState();
+}
+
+class _CancelTripScreenState extends State<CancelTripScreen> {
+  bool tripCancelled = false;
+  Trip currentTrip = Trip('Ciudad de destino', DateTime.now());
+
+  void cancelTrip() {
+    setState(() {
+      tripCancelled = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cancelar Viaje'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            if (!tripCancelled)
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Confirmar Cancelación'),
+                        content: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('¿Estás seguro de que quieres cancelar el siguiente viaje?'),
+                            SizedBox(height: 16),
+                            Text('Destino: ${currentTrip.destination}'),
+                            Text('Hora: ${currentTrip.time.toString()}'),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancelar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Aceptar'),
+                            onPressed: () {
+                              cancelTrip();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('Cancelar Viaje'),
+              ),
+            if (tripCancelled)
+              Text(
+                'Viaje Cancelado',
+                style: TextStyle(fontSize: 24),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
