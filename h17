@@ -1,0 +1,282 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Carpool App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Center(
+        child: LoginForm(),
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      // Lógica para autenticar al usuario
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      // Comprobar credenciales (ejemplo básico)
+      if (email == 'correo@ulima.edu.pe' && password == 'contraseña') {
+        _showDialog('Inicio de sesión exitoso');
+        // Navegar al menú principal
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MainMenuPage()),
+        );
+      } else {
+        _showDialog('Error de inicio de sesión');
+      }
+    }
+  }
+
+  void _showDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Mensaje'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Correo ULima',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa tu correo ULima';
+                }
+                // Validar el formato del correo electrónico utilizando una expresión regular
+                RegExp emailRegex = RegExp(r'^[a-zA-Z0-9+_.-]+@ulima\.edu\.pe$');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Por favor ingresa un correo válido de la Universidad de Lima';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Contraseña',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa tu contraseña';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: _submitForm,
+              child: Text('Iniciar sesión'),
+            ),
+            SizedBox(height: 16.0),
+            TextButton(
+              onPressed: () {
+                // Navegar a la pantalla de registro
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                );
+              },
+              child: Text('¿No tienes una cuenta? Regístrate aquí'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Registro'),
+      ),
+      body: Center(
+        child: RegisterForm(),
+      ),
+    );
+  }
+}
+
+class RegisterForm extends StatefulWidget {
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text;
+      String password = _passwordController.text;
+      // Lógica para registrar al usuario
+      
+
+      // Validar el formato del correo electrónico utilizando una expresión regular
+      RegExp emailRegex = RegExp(r'^[a-zA-Z0-9+_.-]+@ulima\.edu\.pe$');
+      if (!emailRegex.hasMatch(email)) {
+        _sendConfirmationEmail(email);
+        _showDialog('Registro exitoso. Revisa tu correo para confirmar.');
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainMenuPage()),
+      );
+        
+        return;
+      }
+      else {
+        _showDialog('Error de Registro. Por favor utiliza un correo de la Universidad de Lima');
+      }
+      
+      
+    }
+  }
+
+  void _sendConfirmationEmail(String email) {
+    // Lógica para enviar el correo de confirmación (implementación real necesaria)
+  }
+
+  void _showDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Mensaje'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Correo ULima',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa tu correo ULima';
+                }
+                // Validar el formato del correo electrónico utilizando una expresión regular
+                RegExp emailRegex = RegExp(r'^[a-zA-Z0-9+_.-]+@aloe\.ulima\.edu\.pe$');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Por favor ingresa un correo válido de la Universidad de Lima';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Contraseña',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa tu contraseña';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: _submitForm,
+              child: Text('Registrar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MainMenuPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Menú principal'),
+      ),
+      body: Center(
+        child: Text('Bienvenido al menú principal'),
+      ),
+    );
+  }
+}
