@@ -1,0 +1,41 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
+import 'package:tu_app/main.dart';
+
+void main() {
+  testWidgets('Verificar navegación a las diferentes páginas', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    // Verificar que estamos inicialmente en la HomePage.
+    expect(find.text('Página Principal'), findsOneWidget);
+
+    // Abre el AppDrawer.
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pumpAndSettle();
+
+    // Navegar a "Mi Perfil"
+    await tester.tap(find.text('Mi Perfil'));
+    await tester.pumpAndSettle();
+
+    // Verificar que estamos en la ProfilePage.
+    expect(find.text('Mi Perfil'), findsOneWidget);
+
+    // Navegar de vuelta al HomePage.
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    // Verificar que estamos de vuelta en la HomePage.
+    expect(find.text('Página Principal'), findsOneWidget);
+
+    // Abre el AppDrawer nuevamente.
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pumpAndSettle();
+
+    // Navegar a "Cuenta"
+    await tester.tap(find.text('Cuenta'));
+    await tester.pumpAndSettle();
+
+    // Verificar que estamos en la AccountPage.
+    expect(find.text('Cuenta'), findsOneWidget);
+  });
+}
