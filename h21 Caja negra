@@ -1,0 +1,7 @@
+void main() {
+  testWidgets('Should display remaining time correctly', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    expect(find.text('01:00'), findsOneWidget);
+  });
+}
