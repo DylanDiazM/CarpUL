@@ -1,0 +1,32 @@
+void main() {
+  test('Should create DriverProfile correctly', () {
+    var driver = DriverProfile(
+      firstName: 'John',
+      lastName: 'Doe',
+      age: 30,
+      vehicleColor: 'Rojo',
+      vehicleMake: 'Toyota',
+      vehicleModel: 'Camry',
+      vehicleYear: 2022,
+      rating: 4.5,
+    );
+
+    expect(driver.firstName, 'John');
+    // ... Resto de los campos
+  });
+
+  test('Should create Trip correctly', () {
+    var driver = DriverProfile(
+      // ... Data del conductor
+    );
+
+    var trip = Trip(
+      id: '1',
+      destination: 'Destino 1',
+      driver: driver,
+    );
+
+    expect(trip.id, '1');
+    // ... Resto de los campos
+  });
+}
