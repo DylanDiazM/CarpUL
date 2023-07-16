@@ -1,0 +1,145 @@
+import 'package:flutter/material.dart';
+
+// Modelo de datos para el perfil del conductor
+class DriverProfile {
+  final String firstName;
+  final String lastName;
+  final int age;
+  final String vehicleColor;
+  final String vehicleMake;
+  final String vehicleModel;
+  final int vehicleYear;
+  final double rating;
+
+  DriverProfile({
+    required this.firstName,
+    required this.lastName,
+    required this.age,
+    required this.vehicleColor,
+    required this.vehicleMake,
+    required this.vehicleModel,
+    required this.vehicleYear,
+    required this.rating,
+  });
+}
+
+// Modelo de datos para los viajes
+class Trip {
+  final String id;
+  final String destination;
+  final DriverProfile driver;
+
+  Trip({
+    required this.id,
+    required this.destination,
+    required this.driver,
+  });
+}
+
+// Pantalla principal que muestra la lista de viajes
+class HomeScreen extends StatelessWidget {
+  final List<Trip> trips = [
+    Trip(
+      id: '1',
+      destination: 'Destino 1',
+      driver: DriverProfile(
+        firstName: 'John',
+        lastName: 'Doe',
+        age: 30,
+        vehicleColor: 'Rojo',
+        vehicleMake: 'Toyota',
+        vehicleModel: 'Camry',
+        vehicleYear: 2022,
+        rating: 4.5,
+      ),
+    ),
+    Trip(
+      id: '2',
+      destination: 'Destino 2',
+      driver: DriverProfile(
+        firstName: 'Jane',
+        lastName: 'Smith',
+        age: 35,
+        vehicleColor: 'Azul',
+        vehicleMake: 'Honda',
+        vehicleModel: 'Accord',
+        vehicleYear: 2021,
+        rating: 4.2,
+      ),
+    ),
+    // Agrega más viajes según sea necesario
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Viajes Disponibles'),
+      ),
+      body: ListView.builder(
+        itemCount: trips.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text('Viaje ${trips[index].id} - ${trips[index].destination}'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DriverProfileScreen(
+                    driverProfile: trips[index].driver,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Pantalla de visualización del perfil del conductor
+class DriverProfileScreen extends StatelessWidget {
+  final DriverProfile driverProfile;
+
+  DriverProfileScreen({required this.driverProfile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Perfil del Conductor'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Nombre: ${driverProfile.firstName} ${driverProfile.lastName}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text('Edad: ${driverProfile.age}'),
+            SizedBox(height: 8),
+            Text('Color del vehículo: ${driverProfile.vehicleColor}'),
+            SizedBox(height: 8),
+            Text('Marca del vehículo: ${driverProfile.vehicleMake}'),
+            SizedBox(height: 8),
+            Text('Modelo del vehículo: ${driverProfile.vehicleModel}'),
+            SizedBox(height: 8),
+            Text('Año del vehículo: ${driverProfile.vehicleYear}'),
+            SizedBox(height: 8),
+            Text('Rating: ${driverProfile.rating}'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: HomeScreen(),
+  ));
+}
