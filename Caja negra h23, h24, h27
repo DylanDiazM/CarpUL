@@ -1,0 +1,20 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
+import 'package:tu_app/main.dart';
+
+void main() {
+  testWidgets('Navegación a la página de feedback', (WidgetTester tester) async {
+    // Construye la aplicación y activa el callback.
+    await tester.pumpWidget(CalificacionApp());
+
+    // Verifica que la pantalla de inicio es la pantalla de calificación
+    expect(find.text('Calificar al conductor'), findsOneWidget);
+
+    // Toca el botón de enviar calificación
+    await tester.tap(find.text('Enviar calificación'));
+    await tester.pumpAndSettle();
+
+    // Verifica que la pantalla de retroalimentación se muestra
+    expect(find.text('Enviar Feedback'), findsOneWidget);
+  });
+}
