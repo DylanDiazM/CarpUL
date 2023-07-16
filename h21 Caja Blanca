@@ -1,0 +1,18 @@
+void main() {
+  _HomePageState homePageState = _HomePageState();
+
+  test('Should format time correctly', () {
+    expect(homePageState.formatTime(90), '01:30');
+    expect(homePageState.formatTime(3600), '60:00');
+  });
+
+  test('Should start timer and reduce remaining time', () async {
+    homePageState.remainingTime = 5;
+    homePageState.startTimer();
+    await Future.delayed(Duration(seconds: 3));
+
+    expect(homePageState.remainingTime, lessThan(5));
+
+    homePageState.stopTimer();
+  });
+}
