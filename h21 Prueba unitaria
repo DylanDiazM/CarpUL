@@ -1,0 +1,7 @@
+void main() {
+  _HomePageState homePageState = _HomePageState();
+
+  test('Should format time correctly', () {
+    expect(homePageState.formatTime(90), '01:30');
+    expect(homePageState.formatTime(3600), '60:00');
+  });
