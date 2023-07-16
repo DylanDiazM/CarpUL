@@ -1,0 +1,14 @@
+void main() {
+  testWidgets('Should display driver profile details correctly', (WidgetTester tester) async {
+    var driver = DriverProfile(
+      // ... Data del conductor
+    );
+
+    await tester.pumpWidget(MaterialApp(
+      home: DriverProfileScreen(driverProfile: driver),
+    ));
+
+    expect(find.text('Nombre: Gabriel Naquira'), findsOneWidget);
+    // ... Resto de los campos
+  });
+}
