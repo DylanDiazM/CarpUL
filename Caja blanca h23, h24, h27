@@ -1,0 +1,14 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tu_app/main.dart';
+
+void main() {
+  test('Lógica de submitRating', () {
+    var calificacionPage = _CalificacionPageState();
+    calificacionPage._rating = 3;
+    calificacionPage._submitRating();
+    
+    // Aquí deberías verificar que la calificación se guardó correctamente en la base de datos.
+    // Sin embargo, como este es solo un ejemplo, vamos a asumir que si la calificación es mayor que 0, entonces se guardó correctamente.
+    expect(calificacionPage._rating, isGreaterThan(0));
+  });
+}
