@@ -1,0 +1,9 @@
+void main() {
+  testWidgets('Should display correct number of trips', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: HomeScreen(),
+    ));
+
+    expect(find.byType(ListTile), findsNWidgets(2)); // Asume que hay 2 viajes en la lista
+  });
+}
