@@ -1,0 +1,16 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tu_app/main.dart';
+
+void main() {
+  test('Actualizar calificación', () {
+    var listadoCalificacionesPage = _ListadoCalificacionesPageState();
+
+    var oldCalificacion = {'id': 1, 'conductor': 'Conductor 1', 'rating': 4, 'comentario': 'Buen servicio'};
+    var newCalificacion = {'id': 1, 'conductor': 'Conductor 1', 'rating': 5, 'comentario': 'Excelente servicio'};
+
+    listadoCalificacionesPage.calificaciones = [oldCalificacion];
+    listadoCalificacionesPage._updateCalificacion(newCalificacion);
+
+    expect(listadoCalificacionesPage.calificaciones[0], newCalificacion);
+  });
+}
