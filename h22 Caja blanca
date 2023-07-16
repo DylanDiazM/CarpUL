@@ -1,9 +1,9 @@
 void main() {
   test('Should create DriverProfile correctly', () {
     var driver = DriverProfile(
-      firstName: 'John',
-      lastName: 'Doe',
-      age: 30,
+      firstName: 'Gabriel',
+      lastName: 'Naquira',
+      age: 23,
       vehicleColor: 'Rojo',
       vehicleMake: 'Toyota',
       vehicleModel: 'Camry',
@@ -11,7 +11,7 @@ void main() {
       rating: 4.5,
     );
 
-    expect(driver.firstName, 'John');
+    expect(driver.firstName, 'Gabriel');
     // ... Resto de los campos
   });
 
