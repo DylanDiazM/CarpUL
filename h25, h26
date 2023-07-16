@@ -1,0 +1,301 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'App de Ejemplo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Página Principal'),
+      ),
+      drawer: AppDrawer(),
+      body: Center(
+        child: Text('Contenido de la página principal'),
+      ),
+    );
+  }
+}
+
+class AppDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          DrawerHeader(
+            child: Text('Menú Usuario'),
+          ),
+          ListTile(
+            title: Text('Mi Perfil'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
+          ),
+          ListTile(
+            title: Text('Cerrar Sesión'),
+            onTap: () {
+              // Implementar la lógica para cerrar sesión
+            },
+          ),
+          ListTile(
+            title: Text('Cuenta'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AccountPage()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  final double averageRating = 4.5;
+  final List<String> comments = [
+    'Excelente usuario',
+    'Muy amable y puntual',
+    'Recomendado, siempre brinda un buen servicio',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mi Perfil'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Promedio de Calificación',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  averageRating.toStringAsFixed(1),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Text('Comentarios'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CommentListPage(comments)),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CommentListPage extends StatelessWidget {
+  final List<String> comments;
+
+  CommentListPage(this.comments);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Comentarios'),
+      ),
+      body: ListView.builder(
+        itemCount: comments.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(comments[index]),
+            subtitle: Text('Usuario'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class AccountPage extends StatefulWidget {
+  @override
+  _AccountPageState createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+  bool _termsAccepted = false;
+
+  void _deleteAccount() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Eliminar cuenta'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('¿Estás seguro de que deseas eliminar tu cuenta?'),
+              SizedBox(height: 16),
+              CheckboxListTile(
+                title: Text('Acepto los términos y condiciones'),
+                value: _termsAccepted,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _termsAccepted = value ?? false;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                if (_termsAccepted) {
+                  // Realizar la lógica para eliminar la cuenta
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Debes aceptar los términos y condiciones.'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Aceptar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cuenta'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Datos de la cuenta',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            Text('Nombre: Gabriel Naquira'),
+            Text('Correo electrónico: 20171046@aloe.ulima.edu.pe'),
+            Text('Número de teléfono: +51 34567890'),
+            SizedBox(height: 16),
+            ElevatedButton(
+              child: Text('Eliminar cuenta'),
+              onPressed: () {
+                _deleteAccount();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Inicio de Sesión'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Cuenta eliminada',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            TextButton(
+              child: Text('Iniciar sesión'),
+              onPressed: () {
+                // Implementar la lógica para iniciar sesión
+              },
+            ),
+            SizedBox(height: 8),
+            TextButton(
+              child: Text('Crear una cuenta nueva'),
+              onPressed: () {
+                // Implementar la lógica para crear una cuenta nueva
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
